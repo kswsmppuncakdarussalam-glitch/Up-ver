@@ -25,5 +25,15 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "exclude": ["dist"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "api",
+    "server",
+    "scripts",
+    "dev-dist"
+  ]
 }

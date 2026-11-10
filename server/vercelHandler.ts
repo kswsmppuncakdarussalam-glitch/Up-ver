@@ -1,9 +1,24 @@
 import { handleApiRoute, type ApiRequest } from './apiRouter.ts';
 
 export async function handleVercelRequest(req: any, res: any) {
+  let requestUrl: string =
+    req.headers?.['x-forwarded-uri'] ||
+    req.headers?.['x-matched-path'] ||
+    req.url ||
+    '/';
+
+  if (requestUrl === '/api' || requestUrl === '/api/') {
+    if (req.query?.path) {
+      const p = Array.isArray(req.query.path) ? req.query.path.join('/') : req.query.path;
+      requestUrl = `/api/${p}`;
+    } else {
+      requestUrl = '/api/setup';
+    }
+  }
+
   const apiReq: ApiRequest = {
     method: req.method || 'GET',
-    url: req.url || '/',
+    url: requestUrl,
     query: (req.query as Record<string, string>) || {},
     body: req.body,
     headers: (req.headers as Record<string, string | undefined>) || {},
